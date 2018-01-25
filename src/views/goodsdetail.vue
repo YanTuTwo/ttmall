@@ -1,5 +1,10 @@
 <template>
 	<div class="goodsdetail">
+		<Breadcrumb class="Breadcrumb">
+	        <BreadcrumbItem to="/">Home</BreadcrumbItem>
+	        <!--<BreadcrumbItem to="/components/breadcrumb">Components</BreadcrumbItem>-->
+	        <BreadcrumbItem>商品详情</BreadcrumbItem>
+	    </Breadcrumb>
 		<div class="productshow">
 			<Carousel v-model="value1" loop :height="420" :radius-dot="true" v-show="!styleshow">
 				<CarouselItem v-for="item in detaildata.imageList">
@@ -81,6 +86,10 @@
 <style scoped lang="scss">
 	.goodsdetail{
 		overflow: hidden;
+		.Breadcrumb{
+			padding: 10px;
+			margin-bottom: 10px;
+		}
 	}
 	.productshow{
 		float: left;
@@ -162,7 +171,7 @@
 				color: #999;
 			}
 			dd{
-				margin-left: 50px;
+				margin-left: 80px;
 				
 			}
 			.marketPrice{
@@ -173,7 +182,7 @@
 				font-size: 30px;
 			}
 			.tax{
-				float: right;
+				/*float: right;*/
 			}
 		}
 	}
