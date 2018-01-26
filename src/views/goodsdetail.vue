@@ -25,7 +25,7 @@
 			<div class="countryIcon">
 				<img :src="detaildata.countryIconUrl"/>{{detaildata.countryName}}直供
 				<span>{{detaildata.deliveryPlaceType==1?'体验中心发货':(detaildata.deliveryPlaceType==2?'保税仓发货':'境外直邮')}}</span>
-				<span><a href="">预计{{detaildata.deliverDay}}送达>></a></span>
+				<span><a href="#">预计{{detaildata.deliverDay}}送达>></a></span>
 			</div>
 			<h3>{{detaildata.name}}</h3>
 			<p>{{detaildata.title}}</p>
@@ -40,8 +40,8 @@
 				</dl>
 				<dl>
 					<dt>进口税</dt>
-					<dd v-if="detaildata.tax!=0">已完税</dd>
-					<dd class="tax" v-if="detaildata.tax==0">{{detaildata.tax}}元/件 <span></span></dd>
+					<dd v-if="detaildata.tax==0">已完税</dd>
+					<dd class="tax" v-if="detaildata.tax!=0">{{detaildata.tax}}元/件 <span>了解税率</span></dd>
 				</dl>
 			</div>
 		</div>
@@ -63,6 +63,7 @@
 		},
 		mounted(){
 			this._getItemById();
+			this._getGroupItemsById()
 		},
 		methods:{
 			_getItemById(){
@@ -77,6 +78,19 @@
 					this.detaildata=res.data.data;
 					this.marketPrice=this.detaildata.marketPrice.toFixed(2);
 					this.price=this.detaildata.price.toFixed(2);
+				})
+			},
+			_getGroupItemsById(){
+				axios.get('/bc/wx/item/GetGroupItemsById',{
+					params:{
+						v:310,
+						id:this.$route.query.itemid,
+						activityId:-1,
+						
+					}
+				}).then((res)=>{
+					console.log(res.data);
+					
 				})
 			}
 		}
@@ -182,7 +196,12 @@
 				font-size: 30px;
 			}
 			.tax{
-				/*float: right;*/
+				span{
+					float: right;
+					font-size: 12px;
+					color: #999;
+					line-height: 30px;
+				}
 			}
 		}
 	}

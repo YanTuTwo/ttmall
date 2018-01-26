@@ -21,20 +21,19 @@
 	export default{
 		props:{
 		   	productdata:{
-		   		type : Array,
-		   		default : null
+		   		type : Array
 		   	}
 	   	},
 	    data(){
 		   	return {
-		   		productlist:[]
+		   		productlist:this.productdata[0].itemList
 		   	}
 	    },	
 	    watch:{
 	   		//监听父组件传入的数据进行组件的更新
 	   		productdata(newValue, oldValue){
-				if(newValue){
-					this.productlist=newValue[0].itemList;			
+				if(newValue){					
+					this.productlist=newValue[0].itemList;							
 				}
 	   		}
 	   	},

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="tabname=='活动专区'">
+		<div v-if="status=='0'">
 			<div class="activity" v-for="(item,index) in tabpagedata">
 				<div class="swiper" v-if="item.code=='banner'&&item.dataType==1">
 					<Carousel v-model="value1" loop  autoplay :height="450">
@@ -55,7 +55,7 @@
 		</div>
 		
 		
-		<div class="listview" v-if="tabname!='活动专区'">
+		<div class="listview" v-if="status!='0'">
 			<Tablistview :productdata="tabpagedata"></Tablistview>
 		</div>
 	</div>
@@ -69,15 +69,15 @@
 		   		type : Array,
 		   		default : null
 		   	},
-		   	tabname:{
-		   		type : String,
+		   	status:{
+		   		type:Number,
 		   	}
 	   	},
 	   	components:{
 	   		Tablistview
 	   	},
 	   	mounted(){
-			console.log(this.$refs.swiperwidth.width)
+
 	   	},
 	   	data(){
 	   		return{

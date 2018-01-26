@@ -1,10 +1,12 @@
 <template>
 	<div>
-		<Tabs :value="currentname" @on-click="onTabSwitch" >
-			<TabPane :label="item.name" v-for="(item,index) in tablist" :name="item.name">
-				<TabDetail :tabpagedata="pagelist" :tabname="currentname"></TabDetail>
-			</TabPane>			
-	    </Tabs>		
+		<keep-alive>
+			<Tabs :value="status" @on-click="onTabSwitch" >
+				<TabPane :label="item.name" v-for="(item,index) in tablist">
+					<TabDetail :tabpagedata="pagelist"  :status='status'></TabDetail>
+				</TabPane>			
+		    </Tabs>	
+		</keep-alive>	
 	</div>
 </template>
 
@@ -17,7 +19,7 @@
 		  		tablist:[],		//页签数据
 		  		pagelist:[], 	//数据
 		  		currentcode:0,		//当前页签code
-		  		currentname:"",		//当前页签name		  		
+		  		status:this.$route.query.hasOwnProperty('status')==true?parseInt(this.$route.query.status):0
 		  	}
 	  	},
 	  	components:{
@@ -25,6 +27,7 @@
 	  	},
 	  	mounted(){
 	  		this._gettablist();
+	  		console.log(this.status);
 	  	},
 		methods:{		
 			//获取tab数据
@@ -47,13 +50,12 @@
 				axios.get('/bc/wx/page/tab/GetPageByCode',{
 		  			params:{
 		  				v:310,
-		  				code: listdata.data[0].code
+		  				code: listdata.data[self.status].code
 		  			}
 			  }).then((res)=>{				  		
-			  		self.pagelist=res.data.data;console.log(self.pagelist);			  		
+			  		self.pagelist=res.data.data;			  		
 			  		self.tablist=listdata.data;
-	  				self.currentcode=self.tablist[0].code;
-	  				self.currentname=self.tablist[0].name;
+	  				self.currentcode=self.tablist[self.status].code;
 			  	})
 			},
 			//根据code值获取数据
@@ -66,23 +68,30 @@
 		  				code: code
 		  			}
 			  }).then((res)=>{				  		
-			  		self.pagelist=res.data.data;console.log(self.pagelist);
+			  		self.pagelist=res.data.data;
 			  		this.$Loading.finish();
 			  	})
 			},
 			//切换tab栏的点击事件
 		  	onTabSwitch(name){
-		  		console.log(name);
-		  		for(var i=0;i<this.tablist.length;i++){
-		  			if(name==this.tablist[i].name){
-		  				console.log(this.tablist[i].code);
-		  				this.currentcode=this.tablist[i].code;
-		  				this.currentname=this.tablist[i].name;
+		  		this.$router.push({
+		  			path:'/index',
+		  			name:'index',
+		  			query:{
+		  				status:name
 		  			}
-		  		}
+		  		})
+				this.currentcode=this.tablist[name].code;
 		  		this._getpagebycode(this.currentcode);
 		  	}
+		},
+		watch:{
+			$route(){
+				console.log("监控"+this.$route.query.status)
+				this.status=parseInt(this.$route.query.status);
+			}
 		}
+		
 	}	
 </script>
 
